@@ -11,6 +11,9 @@
   const maxVisibleRingRadius = 215;
   const voltageFormatter = new Intl.NumberFormat("sv-SE");
 
+  voltage.value = String(physics.defaults.accelerationVoltageVolts);
+  distance.value = String(physics.defaults.screenDistanceMeters);
+
   byId("intro-copy").textContent = lesson.intro;
   byId("pattern-caption").textContent = lesson.patternCaption;
   byId("model-note").textContent = lesson.modelNote;

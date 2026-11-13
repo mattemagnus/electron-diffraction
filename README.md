@@ -4,7 +4,7 @@ En fristående, statisk webbsida för fysikundervisning. Den behöver ingen inst
 
 1. Öppna `index.html` i en webbläsare, eller publicera projektmappen som en GitHub Pages-webbplats.
 2. Ändra undervisningstexterna och materialets gitterplansavstånd i pikometer i [`data/lesson.js`](data/lesson.js).
-3. Ändra fysikaliska konstanter, diffraktionsordning eller bildförstoring i [`data/physics.js`](data/physics.js).
+3. Ändra reglagens standardvärden, fysikaliska konstanter, diffraktionsordning eller bildförstoring i [`data/physics.js`](data/physics.js).
 4. Ändra gränssnitt och layout i [`index.html`](index.html) och [`styles.css`](styles.css).
 
 ## Fysikmodell

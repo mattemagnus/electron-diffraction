@@ -1,5 +1,9 @@
 // Fysikmodellens konstanter och beräkningar. Ändra här om modellen ska justeras.
 window.PHYSICS = {
+  defaults: {
+    accelerationVoltageVolts: 2500,
+    screenDistanceMeters: 0.13
+  },
   constants: {
     planck: 6.62607015e-34,
     electronMass: 9.1093837139e-31,
