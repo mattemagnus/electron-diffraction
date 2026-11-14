@@ -47,11 +47,9 @@ body {
   color: #fff;
   background: #238f83;
   border-radius: 9px;
-  font-size: 15px;
+  font-size: 19px;
 }
 
-.brand-mark sup { margin-left: -4px; font-size: 9px; }
-.brand-light { margin-left: 4px; color: var(--teal); }
 .topbar-note { color: #7d8b9b; font-size: 12px; }
 
 main { width: min(1050px, calc(100% - 48px)); margin: 0 auto; }
