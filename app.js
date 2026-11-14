@@ -10,6 +10,8 @@
   const center = 240;
   const maxVisibleRingRadius = 215;
   const voltageFormatter = new Intl.NumberFormat("sv-SE");
+  const diameterFormatter = new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 1 });
+  const ringDiameterOutputs = [];
 
   voltage.value = String(physics.defaults.accelerationVoltageVolts);
   distance.value = String(physics.defaults.screenDistanceMeters);
@@ -20,7 +22,6 @@
   byId("voltage-hint").textContent = lesson.voltageHint;
   byId("distance-hint").textContent = lesson.distanceHint;
   byId("question").textContent = lesson.question;
-  byId("formula-explanation").textContent = lesson.formulaExplanation;
   byId("footer-text").textContent = lesson.footer;
 
   lesson.rings.forEach((ring) => {
@@ -34,7 +35,12 @@
     const spacing = document.createElement("strong");
     spacing.textContent = `${ring.spacingPm} pm`;
     description.append(spacing);
-    item.append(dot, description);
+    const diameter = document.createElement("output");
+    diameter.className = "ring-diameter";
+    diameter.setAttribute("aria-label", `Diameter ${ring.diameterLabel}`);
+    diameter.textContent = `${ring.diameterLabel} —`;
+    ringDiameterOutputs.push(diameter);
+    item.append(dot, description, diameter);
     byId("ring-key").append(item);
   });
 
@@ -52,7 +58,7 @@
 
     if (step.number === "02") {
       const crystalSection = document.createElement("section");
-      crystalSection.className = "crystal-embed";
+      crystalSection.className = "crystal-embed formula-card";
       crystalSection.setAttribute("aria-labelledby", "crystal-title");
       const crystalTitle = document.createElement("h4");
       crystalTitle.id = "crystal-title";
@@ -60,14 +66,23 @@
       const crystalIntro = document.createElement("p");
       crystalIntro.className = "crystal-intro";
       crystalIntro.textContent = lesson.crystalIntro;
-      const planeCards = document.createElement("div");
-      planeCards.className = "plane-cards";
-      planeCards.id = "plane-cards";
+      const planeFigureHost = document.createElement("div");
+      planeFigureHost.id = "plane-figure-host";
       const crystalNote = document.createElement("p");
       crystalNote.className = "crystal-note";
       crystalNote.textContent = lesson.crystalNote;
-      crystalSection.append(crystalTitle, crystalIntro, planeCards, crystalNote);
+      crystalSection.append(crystalTitle, crystalIntro, planeFigureHost, crystalNote);
       article.append(crystalSection);
+    }
+
+    const formulas = byId(`step-formulas-${step.number}`);
+    if (formulas) {
+      const content = formulas.content.cloneNode(true);
+      const explanation = content.querySelector("#formula-explanation");
+      if (explanation) {
+        explanation.textContent = lesson.formulaExplanation;
+      }
+      article.append(content);
     }
 
     byId("steps").append(article);
@@ -92,60 +107,73 @@
     return element;
   }
 
-  function drawPlaneCard(ring, index) {
+  function drawCrystalFigure(rings) {
     const figure = document.createElement("figure");
-    figure.className = "plane-card";
+    figure.className = "plane-figure";
 
     const heading = document.createElement("figcaption");
-    heading.className = "plane-card-heading";
+    heading.className = "plane-figure-heading";
     const name = document.createElement("h3");
-    name.textContent = `Gitterplan ${ring.label}`;
-    const spacing = document.createElement("span");
-    spacing.textContent = `${ring.label} = ${ring.spacingPm} pm`;
-    heading.append(name, spacing);
+    name.textContent = "Gitterplan";
+    const legend = document.createElement("div");
+    legend.className = "plane-legend";
+    rings.forEach((ring) => {
+      const item = document.createElement("span");
+      item.className = "plane-legend-item";
+      item.style.color = ring.color;
+      item.textContent = `${ring.label} = ${ring.spacingPm} pm`;
+      legend.append(item);
+    });
+    heading.append(name, legend);
 
     const illustration = makeSvgElement("svg", {
       class: "plane-illustration",
       viewBox: "0 0 320 192",
       role: "img",
-      "aria-labelledby": `plane-title-${index} plane-description-${index}`
+      "aria-labelledby": "plane-title plane-description"
     });
-    const title = makeSvgElement("title", { id: `plane-title-${index}` });
-    title.textContent = `Hexagonalt grafitplan med gitteravstånd ${ring.label} = ${ring.spacingPm} pm`;
-    const description = makeSvgElement("desc", { id: `plane-description-${index}` });
-    description.textContent =
-      `Hexagonalt nät av kolatomer med parallella markerade gitterplan. En dubbelriktad pil visar avståndet ${ring.spacingPm} pm mellan planen.`;
+    const title = makeSvgElement("title", { id: "plane-title" });
+    title.textContent = "Hexagonalt grafitplan med två gitterplansriktningar";
+    const description = makeSvgElement("desc", { id: "plane-description" });
+    description.textContent = `Hexagonalt nät av kolatomer med två färgmarkerade familjer av parallella gitterplan. Pilarna visar avstånden ${rings
+      .map((ring) => `${ring.label} = ${ring.spacingPm} pm`)
+      .join(" och ")}.`;
     illustration.append(title, description);
     illustration.append(makeSvgElement("rect", {
       x: 0, y: 0, width: 320, height: 192, rx: 12, class: "plane-background"
     }));
 
-    const clipId = `plane-clip-${index}`;
-    const markerId = `plane-arrow-${index}`;
+    const clipId = "plane-clip";
     const definitions = makeSvgElement("defs", {});
     const clipPath = makeSvgElement("clipPath", { id: clipId });
     clipPath.append(makeSvgElement("rect", {
       x: 0, y: 0, width: 320, height: 192, rx: 12
     }));
-    const marker = makeSvgElement("marker", {
-      id: markerId,
-      markerWidth: 7,
-      markerHeight: 7,
-      refX: 3.5,
-      refY: 3.5,
-      orient: "auto-start-reverse",
-      markerUnits: "userSpaceOnUse"
+    definitions.append(clipPath);
+    rings.forEach((ring, index) => {
+      const markerId = `plane-arrow-${index}`;
+      const marker = makeSvgElement("marker", {
+        id: markerId,
+        markerWidth: 7,
+        markerHeight: 7,
+        refX: 3.5,
+        refY: 3.5,
+        orient: "auto-start-reverse",
+        markerUnits: "userSpaceOnUse"
+      });
+      marker.append(makeSvgElement("path", {
+        d: "M 0 0 L 7 3.5 L 0 7 z",
+        fill: ring.color
+      }));
+      definitions.append(marker);
     });
-    marker.append(makeSvgElement("path", {
-      d: "M 0 0 L 7 3.5 L 0 7 z",
-      fill: ring.color
-    }));
-    definitions.append(clipPath, marker);
     illustration.append(definitions);
 
     const clippedDrawing = makeSvgElement("g", { "clip-path": `url(#${clipId})` });
     const bonds = makeSvgElement("g", { class: "carbon-bonds" });
     const atoms = makeSvgElement("g", { class: "carbon-atoms" });
+    const planeLines = makeSvgElement("g", { class: "plane-guides" });
+    const dimensions = makeSvgElement("g", {});
     const centerX = 160;
     const centerY = 96;
     const basisX = latticeParameterPx / 2;
@@ -177,51 +205,54 @@
       }
     }
 
-    const planeAngle = ring.planeAngleDeg * Math.PI / 180;
-    const planeDirection = { x: Math.cos(planeAngle), y: Math.sin(planeAngle) };
-    const planeNormal = { x: -planeDirection.y, y: planeDirection.x };
-    const planeSpacing = ring.spacingPm * pixelPerPm;
-    const planeLines = makeSvgElement("g", {
-      class: "plane-guides",
-      stroke: ring.color
-    });
     const lineLength = 400;
-    for (let offset = -5; offset <= 5; offset += 1) {
-      const shift = offset * planeSpacing;
-      const x = centerX + planeNormal.x * shift;
-      const y = centerY + planeNormal.y * shift;
-      planeLines.append(makeSvgElement("line", {
-        x1: x - planeDirection.x * lineLength,
-        y1: y - planeDirection.y * lineLength,
-        x2: x + planeDirection.x * lineLength,
-        y2: y + planeDirection.y * lineLength,
-        class: "plane-guide"
-      }));
-    }
+    rings.forEach((ring, index) => {
+      const planeAngle = ring.planeAngleDeg * Math.PI / 180;
+      const planeDirection = { x: Math.cos(planeAngle), y: Math.sin(planeAngle) };
+      const planeNormal = { x: -planeDirection.y, y: planeDirection.x };
+      const planeSpacing = ring.spacingPm * pixelPerPm;
+      const familyLines = makeSvgElement("g", { stroke: ring.color });
 
-    const dimensionOffset = -planeSpacing / 2;
-    const dimensionCenterX = centerX + planeNormal.x * dimensionOffset;
-    const dimensionCenterY = centerY + planeNormal.y * dimensionOffset;
-    const dimension = makeSvgElement("line", {
-      x1: dimensionCenterX - planeNormal.x * planeSpacing / 2,
-      y1: dimensionCenterY - planeNormal.y * planeSpacing / 2,
-      x2: dimensionCenterX + planeNormal.x * planeSpacing / 2,
-      y2: dimensionCenterY + planeNormal.y * planeSpacing / 2,
-      class: "plane-dimension",
-      stroke: ring.color,
-      "marker-start": `url(#${markerId})`,
-      "marker-end": `url(#${markerId})`
+      for (let offset = -5; offset <= 5; offset += 1) {
+        const shift = offset * planeSpacing;
+        const x = centerX + planeNormal.x * shift;
+        const y = centerY + planeNormal.y * shift;
+        familyLines.append(makeSvgElement("line", {
+          x1: x - planeDirection.x * lineLength,
+          y1: y - planeDirection.y * lineLength,
+          x2: x + planeDirection.x * lineLength,
+          y2: y + planeDirection.y * lineLength,
+          class: "plane-guide"
+        }));
+      }
+
+      planeLines.append(familyLines);
+
+      const dimensionOffset = -planeSpacing / 2;
+      const dimensionAlongOffset = (index - (rings.length - 1) / 2) * 100;
+      const dimensionCenterX =
+        centerX + planeDirection.x * dimensionAlongOffset + planeNormal.x * dimensionOffset;
+      const dimensionCenterY =
+        centerY + planeDirection.y * dimensionAlongOffset + planeNormal.y * dimensionOffset;
+      dimensions.append(makeSvgElement("line", {
+        x1: dimensionCenterX - planeNormal.x * planeSpacing / 2,
+        y1: dimensionCenterY - planeNormal.y * planeSpacing / 2,
+        x2: dimensionCenterX + planeNormal.x * planeSpacing / 2,
+        y2: dimensionCenterY + planeNormal.y * planeSpacing / 2,
+        class: "plane-dimension",
+        stroke: ring.color,
+        "marker-start": `url(#plane-arrow-${index})`,
+        "marker-end": `url(#plane-arrow-${index})`
+      }));
     });
 
-    clippedDrawing.append(bonds, planeLines, atoms, dimension);
+    clippedDrawing.append(bonds, planeLines, atoms, dimensions);
     illustration.append(clippedDrawing);
     figure.append(heading, illustration);
     return figure;
   }
 
-  lesson.rings.forEach((ring, index) => {
-    byId("plane-cards").append(drawPlaneCard(ring, index));
-  });
+  byId("plane-figure-host").append(drawCrystalFigure(lesson.rings));
 
   function update() {
     const voltageVolts = Number(voltage.value);
@@ -233,6 +264,10 @@
     byId("distance-output").textContent = `${Math.round(distanceMeters * 1000)} mm`;
     const wavelengthOutput = byId("wavelength-output");
     rings.replaceChildren();
+    ringDiameterOutputs.forEach((output, index) => {
+      const diameterLabel = lesson.rings[index].diameterLabel;
+      output.textContent = wavelengthMeters === null ? `${diameterLabel} ej definierad` : `${diameterLabel} —`;
+    });
     const centralSpotVisible = wavelengthMeters !== null;
     byId("central-spot").style.display = centralSpotVisible ? "" : "none";
     byId("central-halo").style.display = centralSpotVisible ? "" : "none";
@@ -247,15 +282,19 @@
         "Vid 0 V accelereras inga elektroner och inget diffraktionsmönster visas.";
     } else {
       wavelengthOutput.textContent = `${(wavelengthMeters * 1e9).toFixed(4)} nm`;
-      lesson.rings.forEach((ring) => {
+      lesson.rings.forEach((ring, index) => {
+        const diameterOutput = ringDiameterOutputs[index];
         const radiusMeters = physics.ringRadius(
           ring.spacingPm * 1e-12,
           wavelengthMeters,
           distanceMeters
         );
         if (radiusMeters === null) {
+          diameterOutput.textContent = `${ring.diameterLabel}: ingen ring`;
           return;
         }
+        diameterOutput.textContent =
+          `${ring.diameterLabel} = ${diameterFormatter.format(2 * radiusMeters * 1000)} mm`;
         const radiusPixels = radiusMeters * 1000 * physics.drawingMagnification;
         if (radiusPixels > maxVisibleRingRadius) {
           ringsOutsideScreen += 1;

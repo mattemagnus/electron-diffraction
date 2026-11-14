@@ -9,13 +9,13 @@ En fristående, statisk webbsida för fysikundervisning. Den behöver ingen inst
 
 ## Fysikmodell
 
-Våglängden beräknas med den relativistiska de Broglie-relationen för en elektron som accelererats genom spänningen \(V\):
+Våglängden beräknas med den relativistiska de Broglie-relationen för en elektron som accelererats genom spänningen \(U_a\). Den kinetiska energin är \(E_k=eU_a=(\gamma-1)m_ec^2\), där \(\gamma=1/\sqrt{1-v^2/c^2}\). Rörelsemängden är \(p=\gamma m_ev=m_ec\sqrt{\gamma^2-1}\) och därmed:
 
 \[
-\lambda = \frac{h}{\sqrt{2m_e eV\left(1+\frac{eV}{2m_e c^2}\right)}}.
+\lambda = \frac{h}{p} = \frac{h}{m_ec\sqrt{\gamma^2-1}}.
 \]
 
-Första ordningens diffraktion följer Braggs lag \(2d\sin\theta=\lambda\). Den beräknade radien på skärmen är \(r=L\tan(2\theta)\). Spänningsreglaget går från 0 till 10 000 V. Vid 0 V accelereras inga elektroner, så våglängden är odefinierad. Startavståndet till skärmen är 130 mm och kolmodellen har gitteravstånden d₁ = 123 pm och d₂ = 213 pm. Bilden förstorar radierna för att göra dem synliga; våglängden och radien i modellen beräknas ändå från valda fysikaliska värden.
+Första ordningens diffraktion följer Braggs lag \(2d\sin\theta=\lambda\). Ringens diameter på skärmen beräknas som \(D=2L\tan(2\theta)\). Spänningsreglaget går från 0 till 10 000 V. Vid 0 V accelereras inga elektroner, så våglängden är odefinierad. Startavståndet till skärmen är 130 mm och kolmodellen har gitteravstånden d₁ = 123 pm och d₂ = 213 pm. Bilden förstorar ringarna för att göra dem synliga; våglängden och diametern i modellen beräknas ändå från valda fysikaliska värden.
 
 Steg 02, om hur kristallen sprider vågorna, innehåller också en illustration av grafitens hexagonala nät och de två familjerna av gitterplan. Illustrationernas texter, etiketter och avstånd hämtas från [`data/lesson.js`](data/lesson.js).
 

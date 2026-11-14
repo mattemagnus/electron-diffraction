@@ -107,6 +107,7 @@ h2 { margin-bottom: 0; font-size: 20px; letter-spacing: -.65px; }
 .key-item { display: inline-flex; gap: 7px; align-items: center; color: #617082; font-size: 10px; }
 .key-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ring-color); box-shadow: 0 0 7px var(--ring-color); }
 .key-item strong { margin-left: 3px; color: #26394a; font-weight: 600; }
+.ring-diameter { margin-left: 2px; color: #3a746d; font-size: 10px; font-weight: 700; white-space: nowrap; }
 .model-note { max-width: 390px; margin: 13px auto 0; color: #929eaa; text-align: center; font-size: 10px; line-height: 1.6; }
 
 .controls { padding: 31px 30px; border-left: 1px solid var(--line); background: #fbfcfe; }
@@ -139,14 +140,14 @@ input[type="range"]:focus-visible { outline: 3px solid #a7e4d7; outline-offset: 
 .question > span:first-child { color: #d59b49; }
 
 .step { align-self: start; }
-.crystal-embed { margin-top: 16px; padding-top: 14px; border-top: 1px solid #e8ecf1; }
-.crystal-embed h4 { margin: 0 0 6px; color: #304657; font: 700 12px "Manrope", sans-serif; }
+.crystal-embed h4, .step-equations h4 { margin: 0 0 6px; color: #304657; font: 700 12px "Manrope", sans-serif; }
 .crystal-intro { margin: 0 0 11px; color: #798797; font-size: 10px; line-height: 1.6; }
-.plane-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 9px; }
-.plane-card { min-width: 0; margin: 0; padding: 9px; border: 1px solid #e9edf1; border-radius: 11px; background: #fcfdfe; }
-.plane-card-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 0 3px 9px; }
-.plane-card-heading h3 { margin: 0; color: #2a3c4c; font-size: 12px; }
-.plane-card-heading span { color: #497d7e; font-size: 11px; font-weight: 700; }
+.plane-figure { min-width: 0; margin: 0; padding: 9px; border: 1px solid #e9edf1; border-radius: 11px; background: #fcfdfe; }
+.plane-figure-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; padding: 0 3px 9px; }
+.plane-figure-heading h3 { margin: 0; color: #2a3c4c; font-size: 12px; }
+.plane-legend { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.plane-legend-item { color: #497d7e; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.plane-legend-item::before { display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: currentColor; content: ""; }
 .plane-illustration { display: block; width: 100%; height: auto; overflow: hidden; }
 .plane-background { fill: #f0f5f6; }
 .carbon-bond { stroke: #b6c4ca; stroke-width: 1.2; }
@@ -163,11 +164,40 @@ input[type="range"]:focus-visible { outline: 3px solid #a7e4d7; outline-offset: 
 .step-number { color: #4aab98; font: 700 11px "Manrope", sans-serif; }
 .step h3 { margin: 9px 0 6px; font-size: 13px; letter-spacing: -.2px; }
 .step p { margin: 0; color: #798797; font-size: 11px; line-height: 1.6; }
-.formula-card { display: flex; justify-content: space-between; gap: 24px; align-items: center; margin-top: 15px; padding: 18px 20px; border-radius: 13px; background: #edf4f5; }
+.formula-card { margin-top: 15px; padding: 18px 20px; border-radius: 13px; background: #edf4f5; }
+.formula-top { display: flex; justify-content: space-between; gap: 24px; align-items: center; }
 .formula-card .eyebrow { margin-bottom: 8px; color: #628189; }
-.formula { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 0; color: #274c55; font: 700 17px "Manrope", sans-serif; }
-.formula-arrow { color: #85aaa9; font-size: 14px; }
 .formula-explanation { max-width: 400px; margin: 0; color: #70858b; font-size: 10px; line-height: 1.7; }
+.pattern-equations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.step .formula-card { margin-top: 12px; padding: 12px; }
+.step .formula-top { align-items: flex-start; flex-direction: column; gap: 8px; }
+.step .formula-card .eyebrow { margin-bottom: 0; }
+.step .pattern-equations { grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
+.angle-figure { margin: 14px 0 0; padding: 10px 12px 9px; border: 1px solid #d9e5e6; border-radius: 10px; background: rgba(255, 255, 255, .5); }
+.angle-diagram { display: block; width: 100%; height: auto; }
+.step .angle-diagram text { font-size: 30px; }
+.angle-diagram text { fill: #30383b; font-family: math, "STIX Two Math", "Cambria Math", serif; font-size: 21px; font-style: italic; font-weight: 400; }
+.angle-diagram .angle-number { font-style: normal; }
+.angle-crystal { fill: #c5c6c7; stroke: #454b4d; stroke-width: 2; }
+.angle-plane-extension { stroke: #596164; stroke-width: 1.6; }
+.angle-lattice-plane { stroke: #d8524c; stroke-linecap: round; stroke-width: 5; }
+.angle-incident-ray, .angle-diffracted-ray { stroke: #3f484c; stroke-width: 2.6; }
+.angle-diffracted-ray-lower { stroke-width: 1.8; }
+.angle-central-axis { stroke: #3f484c; stroke-width: 2; }
+.angle-screen { fill: #fff; stroke: #343b3e; stroke-width: 3; }
+.angle-distance-line, .angle-diameter-line, .angle-dimension-tick { stroke: #3f484c; stroke-width: 1.5; }
+.angle-arc, .angle-scattering-arc { fill: none; stroke: #3f484c; stroke-width: 1.6; }
+.angle-label { paint-order: stroke; stroke: #f5fafb; stroke-linejoin: round; stroke-width: 6px; }
+.angle-figure-caption { margin: 9px 3px 1px; color: #70858b; font-size: 10px; line-height: 1.65; }
+.step-equations { display: grid; gap: 9px; }
+.step-equations .wavelength-equations { grid-template-columns: 1fr; gap: 8px; }
+.wavelength-equations { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.wavelength-equation { min-width: 0; padding: 10px 12px; border: 1px solid #deeaeb; border-radius: 10px; background: rgba(255, 255, 255, .72); }
+.wavelength-equation span { display: block; margin-bottom: 6px; color: #71858b; font-size: 9px; }
+.math-equation { display: block; max-width: 100%; color: #274c55; font-size: clamp(13px, 1.45vw, 16px); overflow: visible; }
+.inline-equation { display: inline-block; vertical-align: middle; color: #466c74; font-size: 1.05em; }
+.math-equation msqrt, .inline-equation msqrt { position: relative; top: .18em; }
+.wavelength-note { margin: 10px 1px 0; color: #70858b; font-size: 10px; line-height: 1.65; }
 
 footer { display: flex; justify-content: space-between; gap: 20px; padding: 17px max(6vw, 24px); border-top: 1px solid #e5eaf0; color: #8a97a4; font-size: 10px; }
 footer a { color: #547982; text-decoration: none; }
@@ -182,7 +212,10 @@ footer a:hover { text-decoration: underline; }
   .control-hint { min-height: 0; }
   .steps { gap: 10px; }
   .step { padding: 14px; }
-  .formula-card { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .formula-top { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .pattern-equations { grid-template-columns: 1fr; }
+  .angle-diagram text { font-size: 27px; }
+  .wavelength-equations { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {
@@ -197,7 +230,6 @@ footer a:hover { text-decoration: underline; }
   .steps { grid-template-columns: 1fr; }
   .step { min-height: 0; }
   .step h3 { margin-top: 5px; }
-  .formula { font-size: 14px; }
   footer { padding: 15px 16px; }
 }
 

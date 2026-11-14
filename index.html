@@ -65,7 +65,7 @@
             <p class="screen-caption" id="pattern-caption" aria-live="polite"></p>
           </div>
 
-          <div class="ring-key" id="ring-key" aria-label="Diffraktionsringarnas gitterplansavstånd"></div>
+          <div class="ring-key" id="ring-key" aria-label="Gitteravstånd och ringdiametrar på skärmen"></div>
           <p class="model-note" id="model-note"></p>
         </div>
 
@@ -76,7 +76,7 @@
 
           <div class="control">
             <div class="control-heading">
-              <label for="voltage">Accelerationsspänning</label>
+              <label for="voltage">Accelerationsspänning U<sub>a</sub></label>
               <output id="voltage-output" for="voltage"></output>
             </div>
             <input id="voltage" type="range" min="0" max="10000" step="1">
@@ -86,7 +86,7 @@
 
           <div class="control">
             <div class="control-heading">
-              <label for="distance">Kristall till skärm</label>
+              <label for="distance">Avstånd kristall till skärm <i>L</i></label>
               <output id="distance-output" for="distance"></output>
             </div>
             <input id="distance" type="range" min="0.10" max="0.50" step="0.01">
@@ -111,13 +111,167 @@
           <h2 id="explainer-title">Från elektron till ringmönster</h2>
         </div>
         <div class="steps" id="steps"></div>
-        <div class="formula-card">
-          <div>
-            <p class="eyebrow">SAMBANDET BAKOM MÖNSTRET</p>
-            <p class="formula"><span>2d sin θ = nλ</span><span class="formula-arrow">→</span><span>r = L tan(2θ)</span></p>
+        <template id="step-formulas-01">
+          <div class="step-equations formula-card">
+            <h4>Våglängd från accelerationsspänningen</h4>
+            <div class="wavelength-equations">
+              <div class="wavelength-equation">
+                <span>Kinetisk energi och gammafaktor</span>
+                <math class="math-equation" display="block">
+                  <mrow>
+                    <msub><mi>E</mi><mi>k</mi></msub>
+                    <mo>=</mo><mi>e</mi><msub><mi>U</mi><mi>a</mi></msub>
+                    <mo>=</mo>
+                    <mrow><mo>(</mo><mi>γ</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow>
+                    <msub><mi>m</mi><mi>e</mi></msub>
+                    <msup><mi>c</mi><mn>2</mn></msup>
+                  </mrow>
+                </math>
+              </div>
+              <div class="wavelength-equation">
+                <span>Relativistisk rörelsemängd</span>
+                <math class="math-equation" display="block">
+                  <mrow>
+                    <mi>p</mi><mo>=</mo><mi>γ</mi>
+                    <msub><mi>m</mi><mi>e</mi></msub><mi>v</mi>
+                    <mo>=</mo>
+                    <msub><mi>m</mi><mi>e</mi></msub><mi>c</mi>
+                    <msqrt>
+                      <mrow><msup><mi>γ</mi><mn>2</mn></msup><mo>−</mo><mn>1</mn></mrow>
+                    </msqrt>
+                  </mrow>
+                </math>
+              </div>
+              <div class="wavelength-equation">
+                <span>de Broglie-våglängd</span>
+                <math class="math-equation" display="block">
+                  <mrow>
+                    <mi>λ</mi><mo>=</mo>
+                    <mfrac><mi mathsize="1.2em">h</mi><mi>p</mi></mfrac>
+                    <mo>=</mo>
+                    <mfrac>
+                      <mi mathsize="1.2em">h</mi>
+                      <mrow>
+                        <msub><mi>m</mi><mi>e</mi></msub><mi>c</mi>
+                        <msqrt>
+                          <mrow><msup><mi>γ</mi><mn>2</mn></msup><mo>−</mo><mn>1</mn></mrow>
+                        </msqrt>
+                      </mrow>
+                    </mfrac>
+                  </mrow>
+                </math>
+              </div>
+            </div>
+            <p class="wavelength-note">
+              <math class="inline-equation" display="inline" aria-label="Gamma är ett delat med roten ur ett minus v i kvadrat delat med c i kvadrat">
+                <mrow>
+                  <mi>γ</mi><mo>=</mo>
+                  <mfrac>
+                    <mn>1</mn>
+                    <msqrt>
+                      <mrow>
+                        <mn>1</mn><mo>−</mo>
+                        <mfrac><msup><mi>v</mi><mn>2</mn></msup><msup><mi>c</mi><mn>2</mn></msup></mfrac>
+                      </mrow>
+                    </msqrt>
+                  </mfrac>
+                </mrow>
+              </math>
+              där v är elektronens hastighet. h är Plancks konstant, mₑ elektronens massa, e elementarladdningen och c ljushastigheten.
+              Vid låga hastigheter kan approximationen
+              <math class="inline-equation" display="inline" aria-label="Lambda ungefär h delat med roten ur två m e e U a, ungefär 1,227 delat med roten ur U a i volt nanometer">
+                <mrow>
+                  <mi>λ</mi><mo>≈</mo>
+                  <mfrac>
+                    <mi>h</mi>
+                    <msqrt>
+                      <mrow>
+                        <mn>2</mn><msub><mi>m</mi><mi>e</mi></msub><mi>e</mi>
+                        <msub><mi>U</mi><mi>a</mi></msub>
+                      </mrow>
+                    </msqrt>
+                  </mfrac>
+                  <mo>≈</mo>
+                  <mfrac>
+                    <mn>1,227</mn>
+                    <msqrt>
+                      <mrow><msub><mi>U</mi><mi>a</mi></msub><mo>[</mo><mi>V</mi><mo>]</mo></mrow>
+                    </msqrt>
+                  </mfrac>
+                  <mtext> nm</mtext>
+                </mrow>
+              </math>
+              användas.
+            </p>
           </div>
-          <p class="formula-explanation" id="formula-explanation"></p>
+        </template>
+        <template id="step-formulas-03">
+          <div class="formula-card">
+          <div class="formula-top">
+            <div>
+              <p class="eyebrow">SAMBANDET BAKOM MÖNSTRET</p>
+              </div>
+            <p class="formula-explanation" id="formula-explanation"></p>
+          </div>
+          <div class="pattern-equations">
+            <div class="wavelength-equation">
+              <span>Braggs lag</span>
+              <math class="math-equation" display="block">
+                <mrow>
+                  <mn>2</mn><mi>d</mi><mspace width="0.15em"/>
+                  <mi>sin</mi><mspace width="0.15em"/><mi>θ</mi>
+                  <mo>=</mo><mi>n</mi><mi>λ</mi>
+                </mrow>
+              </math>
+            </div>
+            <div class="wavelength-equation">
+              <span>Ringens diameter</span>
+              <math class="math-equation" display="block">
+                <mrow>
+                  <mi>D</mi><mo>=</mo><mn>2</mn><mi>L</mi><mspace width="0.15em"/><mi>tan</mi>
+                  <mo>(</mo><mn>2</mn><mi>θ</mi><mo>)</mo>
+                </mrow>
+              </math>
+            </div>
+          </div>
+          <figure class="angle-figure" aria-labelledby="angle-figure-caption">
+            <svg class="angle-diagram" viewBox="0 0 760 460" role="img" aria-labelledby="angle-diagram-title angle-diagram-description">
+              <title id="angle-diagram-title">Braggvinkeln kopplar kristallen till ringdiametern på skärmen</title>
+              <desc id="angle-diagram-description">En horisontell elektronstråle träffar ett gitterplan i kristallen. Vinkeln theta mellan strålen och planet markeras på båda sidor om planet. Den diffrakterade strålen lämnar kristallen i vinkeln 2 theta och träffar skärmen på avståndet L. Avståndet mellan de symmetriska träffpunkterna är diametern D.</desc>
+              <defs>
+                <marker id="angle-beam-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#3f484c"/>
+                </marker>
+              </defs>
+              <line class="angle-distance-line" x1="245" y1="54" x2="422" y2="54"/>
+              <line class="angle-distance-line" x1="466" y1="54" x2="650" y2="54"/>
+              <line class="angle-dimension-tick" x1="245" y1="45" x2="245" y2="64"/>
+              <line class="angle-dimension-tick" x1="650" y1="45" x2="650" y2="64"/>
+              <rect class="angle-crystal" x="225" y="198" width="40" height="124"/>
+              <line class="angle-plane-extension" x1="52" y1="299" x2="225" y2="264"/>
+              <line class="angle-lattice-plane" x1="225" y1="264" x2="265" y2="256"/>
+              <line class="angle-incident-ray" x1="48" y1="260" x2="225" y2="260" marker-end="url(#angle-beam-arrow)"/>
+              <line class="angle-central-axis" x1="245" y1="260" x2="650" y2="260"/>
+              <line class="angle-diffracted-ray" x1="245" y1="260" x2="650" y2="104" marker-end="url(#angle-beam-arrow)"/>
+              <line class="angle-diffracted-ray angle-diffracted-ray-lower" x1="245" y1="260" x2="650" y2="416"/>
+              <rect class="angle-screen" x="650" y="78" width="10" height="364"/>
+              <path class="angle-arc" d="M 189 260 A 56 56 0 0 0 190 270"/>
+              <path class="angle-scattering-arc" d="M 330 260 A 85 85 0 0 0 324 229"/>
+              <line class="angle-diameter-line" x1="684" y1="104" x2="684" y2="245"/>
+              <line class="angle-diameter-line" x1="684" y1="275" x2="684" y2="416"/>
+              <line class="angle-dimension-tick" x1="674" y1="104" x2="694" y2="104"/>
+              <line class="angle-dimension-tick" x1="674" y1="416" x2="694" y2="416"/>
+              <text class="angle-symbol" x="438" y="64">L</text>
+              <text class="angle-label" x="140" y="278" text-anchor="middle">θ</text>
+              <text class="angle-label" x="333" y="252"><tspan class="angle-number">2</tspan><tspan>θ</tspan></text>
+              <text class="angle-symbol" x="684" y="268" text-anchor="middle">D</text>
+            </svg>
+            <figcaption class="angle-figure-caption" id="angle-figure-caption">
+              Vinkeln θ mäts mellan strålen och gitterplanet. Den diffrakterade strålen lämnar kristallen i vinkeln 2θ mot centralaxeln. På skärmen ger avståndet L diametern D = 2L tan(2θ).
+            </figcaption>
+          </figure>
         </div>
+        </template>
       </section>
     </main>
 
