@@ -110,6 +110,37 @@
   function drawCrystalFigure(rings) {
     const figure = document.createElement("figure");
     figure.className = "plane-figure";
+    figure.tabIndex = 0;
+    figure.setAttribute("role", "button");
+    figure.setAttribute("aria-label", "Öppna gitterplanet i helskärmsläge");
+
+    const toggleFullscreen = () => {
+      if (!document.fullscreenElement) {
+        const requestFullscreen = figure.requestFullscreen
+          || figure.webkitRequestFullscreen
+          || figure.mozRequestFullScreen;
+        if (requestFullscreen) {
+          requestFullscreen.call(figure);
+        }
+      } else {
+        const exitFullscreen = document.exitFullscreen
+          || document.webkitExitFullscreen
+          || document.mozCancelFullScreen;
+        if (exitFullscreen) {
+          exitFullscreen.call(document);
+        }
+      }
+    };
+    figure.addEventListener("click", toggleFullscreen);
+    figure.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggleFullscreen();
+      }
+    });
+    document.addEventListener("fullscreenchange", () => {
+      figure.classList.toggle("is-fullscreen", document.fullscreenElement === figure);
+    });
 
     const heading = document.createElement("figcaption");
     heading.className = "plane-figure-heading";
@@ -253,6 +284,42 @@
   }
 
   byId("plane-figure-host").append(drawCrystalFigure(lesson.rings));
+
+  const angleFigure = document.querySelector(".angle-figure");
+  if (angleFigure) {
+    angleFigure.tabIndex = 0;
+    angleFigure.setAttribute("role", "button");
+    angleFigure.setAttribute("aria-label", "Öppna sambandet mellan kristallen och mönstret i helskärmsläge");
+
+    const toggleAngleFigureFullscreen = () => {
+      if (!document.fullscreenElement) {
+        const requestFullscreen = angleFigure.requestFullscreen
+          || angleFigure.webkitRequestFullscreen
+          || angleFigure.mozRequestFullScreen;
+        if (requestFullscreen) {
+          requestFullscreen.call(angleFigure);
+        }
+      } else {
+        const exitFullscreen = document.exitFullscreen
+          || document.webkitExitFullscreen
+          || document.mozCancelFullScreen;
+        if (exitFullscreen) {
+          exitFullscreen.call(document);
+        }
+      }
+    };
+
+    angleFigure.addEventListener("click", toggleAngleFigureFullscreen);
+    angleFigure.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggleAngleFigureFullscreen();
+      }
+    });
+    document.addEventListener("fullscreenchange", () => {
+      angleFigure.classList.toggle("is-fullscreen", document.fullscreenElement === angleFigure);
+    });
+  }
 
   function update() {
     const voltageVolts = Number(voltage.value);
